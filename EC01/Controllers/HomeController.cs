@@ -16,7 +16,7 @@ namespace EC01.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index(FilterProductVM filterProductVM)
+        public IActionResult Index(FilterProductVM filterProductVM, int page=1)
         {
             const decimal discount = 50;
             var products = _context.Products/*.AsNoTracking()*/.Include(e=>e.Category).AsQueryable();
@@ -66,7 +66,10 @@ namespace EC01.Controllers
             var brands = _context.Brands;
             ViewData["brands"] = brands.AsEnumerable();
 
-
+            //pagination
+            ViewBag.TotalPages = Math.Ceiling(products.Count() / 8.0);
+            ViewBag.CurrentPage = page;
+            products = products.Skip((page - 1) * 8).Take(8); // 0 .. 8
 
             return View(products.ToList());
         }
