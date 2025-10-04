@@ -11,6 +11,102 @@
         <p class="lead fw-normal text-white-50 mb-0">With this shop hompeage template</p>
     </div>
 </header>
+<!-- Filter Section -->
+<section class="py-3 filter-bar">
+    <div class="container">
+        <div class="row" style="background-color: rgba(var(--bs-light-rgb), var(--bs-bg-opacity)) !important;">
+            <div class="col-12">
+                <form>
+                    <div class="row">
+                        <!-- Product Name -->
+                        <div class="col-md-3">
+                            <input type="text" class="form-control" placeholder="Product Name" name="name" value="@ViewBag.name">
+                        </div>
+
+                        <!-- Price Range -->
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" placeholder="Min Price" name="minPrice" value="@ViewBag.minPrice">
+                        </div>
+                        <div class="col-md-2">
+                            <input type="number" class="form-control" placeholder="Max Price" name="maxPrice"
+                                   value="@ViewBag.maxPrice">
+                        </div>
+
+                        <!-- Category -->
+                        <div class="col-md-2">
+                            <select name="categoryId" class="form-control">
+                                <option>--Select Category--</option>
+                                @* @foreach(var item in ViewData["categories"] as IEnumerable<Category>)
+                                {
+                                    <option value="">@item.Name</option>
+                                } *@
+
+                                @foreach (var item in ViewBag.categories)
+                                {
+                                    if (item.Id == ViewBag.categoryId)
+                                    {
+                                        <option value="@item.Id" selected>@item.Name</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@item.Id">@item.Name</option>
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Brand -->
+                        <div class="col-md-2">
+                            <select name="brandId" class="form-control">
+                                <option value="">--Select Brand--</option>
+                                @if (ViewData["brands"] is IEnumerable<Brand> brands)
+                                {
+                                    foreach (var item in brands)
+                                    {
+                                        if (item.Id == ViewBag.brandId)
+                                        {
+                                            <option value="@item.Id" selected>@item.Name</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@item.Id">@item.Name</option>
+                                        }
+                                    }
+                                }
+                            </select>
+                        </div>
+
+                        <!-- Rating -->
+                        @* <div class="col-md-2"> *@
+                        @*     <select name="rating" class="form-control"> *@
+                        @*         <option value="">Any Rating</option> *@
+                        @*         <option>option 1</option> *@
+                        @*         <option>option 2</option> *@
+                        @*         <option>option 3</option> *@
+                        @*     </select> *@
+                        @* </div> *@
+
+                        <!-- Hot Product Checkbox -->
+                        <div class="col-md-1">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="IsHot" value="true" @(ViewBag.isHot is not null && ViewBag.isHot ? "checked" : "")>
+                                <label class="form-check-label">Hot</label>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-dark w-100">Filter</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
 <!-- Section-->
 <div class="container">
     <section class="py-5">
