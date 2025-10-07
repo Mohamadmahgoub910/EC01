@@ -10,8 +10,8 @@
                     <h4 class="mb-0">Create New Category</h4>
                 </div>
                 <div class="card-body p-4">
-                    <form id="categoryForm" method="post" asp-action="Create">
-
+                    <form id="categoryForm" method="post" asp-action="Edit">
+                        @* <input type="hidden" name="id" value=@Model.Id /> *@
                         <div class="mb-3">
                             <label for="categoryName" class="form-label">Category Name</label>
                             <input type="text" class="form-control" id="categoryName" name="Name" value="@Model.Name" placeholder="Enter Category Name">
@@ -19,7 +19,7 @@
 
                         <div class="mb-3">
                             <label for="categoryDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="categoryDescription" name="Description" rows="4" placeholder="Enter Category Description">value="@Model.Description"</textarea>
+                            <textarea class="form-control" id="categoryDescription" name="Description" rows="4" placeholder="Enter Category Description">@Model.Description</textarea>
                         </div>
 
                         <div class="mb-3">
@@ -27,12 +27,12 @@
                             <select class="form-select" id="categoryStatus" name="Status">
                                 @if (Model.Status)
                                 {   
-                                <option value="true" value="true" selected>Active</option>
+                                <option value="true" selected>Active</option>
                                  <option value="false" >Inactive</option>
                                 }
                                 else
                                 {
-                                    <option value="true" value="true" >Active</option>
+                                    <option value="true">Active</option>
                                     <option value="false" selected>Inactive</option>
                                 }
                             </select>
@@ -91,7 +91,7 @@
         Swal.fire({
             icon: 'success',
             title: '🎉 Success!',
-            text: 'Mabrook! You added a new category.',
+            text: 'Mabrook! You update category.',
             showConfirmButton: false,
             timer: 2000
         }).then(() => {

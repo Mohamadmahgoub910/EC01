@@ -39,13 +39,26 @@ namespace EC01.Areas.Admin.Controllers
             return View(category);
         }
 
-        //[HttpPost]
-        //public IActionResult Edit(Category category)
-        //{
-        //    _context.Categories.Add(category);
-        //    _context.SaveChanges();
-        //    return RedirectToAction(nameof(Index));
-        //}
+        [HttpPost]
+        public IActionResult Edit(Category category)
+        {
+            _context.Categories.Update(category);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
+
+        //Delete
+        public IActionResult Delete(int id)
+        {
+            var category = _context.Categories.FirstOrDefault(c => c.Id == id);
+            if (category is null)
+            {
+                return RedirectToAction("NotFoundPage", "Home");
+            }
+            _context.Categories.Remove(category);
+            _context.SaveChanges();
+            return RedirectToAction(nameof(Index));
+        }
     }
     
 }
