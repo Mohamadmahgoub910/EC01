@@ -10,11 +10,25 @@
                     <h4 class="mb-0">Edit New Brand</h4>
                 </div>
                 <div class="card-body p-4">
-                    <form id="brandForm" method="post" asp-action="Edit">
+                    <form id="brandForm" method="post" asp-action="Edit" enctype="multipart/form-data">
                         @* <input type="hidden" name="id" value=@Model.Id /> *@
                         <div class="mb-3">
                             <label for="brandName" class="form-label">Brand Name</label>
                             <input type="text" class="form-control" id="brandName" name="Name" value="@Model.Name" placeholder="Enter Brand Name">
+                        </div>
+
+                        @* Brand Img *@
+
+                        <div class="mb-3">
+                            <label for="Img" class="form-label">Img</label>
+                            <input type="file" class="form-control" id="Img" name="Img" accept="image/*" onchange="previewImage(event)" value="@Model.Img">
+                        </div>
+
+                        <div class="mb-3">
+                            <img id="preview"
+                                 src="~/images/@Model.Img"
+                                 alt="Current Image"
+                                 style="max-width: 200px; border:1px solid #ccc; padding:5px; border-radius:10px;" />
                         </div>
 
                         <div class="mb-3">
@@ -51,6 +65,23 @@
 </div>
 
 <script>
+
+
+
+    // img 
+    function previewImage(event) {
+        const input = event.target;
+        const preview = document.getElementById("preview");
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result; // الصورة الجديدة
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
     document.getElementById("brandForm").addEventListener("submit", function (e) {
         e.preventDefault();
 

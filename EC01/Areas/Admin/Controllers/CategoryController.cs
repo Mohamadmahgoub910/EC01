@@ -6,7 +6,7 @@ namespace EC01.Areas.Admin.Controllers
     [Area("Admin")]
     public class CategoryController : Controller
     {
-        ApplicationDBContext _context = new ApplicationDBContext();
+        private ApplicationDBContext _context = new ApplicationDBContext();
         public IActionResult Index()
         {
             var categories = _context.Categories.AsNoTracking().AsQueryable();
@@ -49,19 +49,6 @@ namespace EC01.Areas.Admin.Controllers
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
-
-        //Delete
-        //public IActionResult Delete(int id)
-        //{
-        //    var category = _context.Categories.FirstOrDefault(c => c.Id == id);
-        //    if (category is null)
-        //    {
-        //        return RedirectToAction("NotFoundPage", "Home");
-        //    }
-        //    _context.Categories.Remove(category);
-        //    _context.SaveChanges();
-        //    return RedirectToAction(nameof(Index));
-        //}
         public IActionResult Delete(int id)
         {
             var category = _context.Categories.FirstOrDefault(e => e.Id == id);

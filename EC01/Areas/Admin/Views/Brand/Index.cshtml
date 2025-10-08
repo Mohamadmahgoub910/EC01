@@ -55,6 +55,8 @@
             button.addEventListener("click", function (e) {
                 e.preventDefault();
 
+                const url = this.getAttribute("href");
+
                 Swal.fire({
                     title: "Are you sure?",
                     text: "This action cannot be undone!",
@@ -65,11 +67,19 @@
                     confirmButtonText: "Yes, delete it!"
                 }).then((result) => {
                     if (result.isConfirmed) {
+
                         Swal.fire({
                             title: "Deleted!",
-                            text: "Your brand has been deleted.",
-                            icon: "success"
+                            text: "Your record has been deleted.",
+                            icon: "success",
+                            showConfirmButton: false,
+                            timer: 1500
                         });
+
+                        // هنا بيتم التحويل فعليًا للأكشن اللي بيعمل الدليت في السيرفر
+                        setTimeout(() => {
+                            window.location.href = url;
+                        }, 1500);
                     }
                 });
             });

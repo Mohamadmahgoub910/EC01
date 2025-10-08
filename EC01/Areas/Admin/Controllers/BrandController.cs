@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using EC01.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
 
@@ -53,6 +54,7 @@ namespace EC01.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
+
             var brand = _context.Brands.FirstOrDefault(c => c.Id == id);
             if (brand is null)
             {
@@ -62,25 +64,39 @@ namespace EC01.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(Brand brand)
+        public IActionResult Edit(Brand brand, IFormFile? img)
         {
-            _context.Brands.Update(brand);
+            var brandInDb= _context.Brands.AsNoTracking().FirstOrDefault(e => e.Id == brand.Id);
+            if (brandInDb is null)
+            {
+                return RedirectToAction("NotFoundPage", "Home");
+            }
+
+            if (img is not null && img.Length > 0)
+            {
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(img.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", fileName);
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    img.CopyTo(stream);
+                }
+                // remove old img from wwwroot
+                var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", brandInDb.Img);
+                if (System.IO.File.Exists(oldPath)) 
+                {
+                    System.IO.File.Delete(oldPath);
+                }
+                // save img in db
+                brand.Img = fileName;
+            }
+            else
+            {
+                brand.Img = brandInDb.Img;
+            }
+                _context.Brands.Update(brand);
             _context.SaveChanges();
             return RedirectToAction(nameof(Index));
         }
-
-        ////Delete
-        //public IActionResult Delete(int id)
-        //{
-        //    var brand = _context.Brands.FirstOrDefault(c => c.Id == id);
-        //    if (brand is null)
-        //    {
-        //        return RedirectToAction("NotFoundPage", "Home");
-        //    }
-        //    _context.Brands.Remove(brand);
-        //    _context.SaveChanges();
-        //    return RedirectToAction(nameof(Index));
-        //}
 
         public IActionResult Delete(int id)
         {
@@ -88,11 +104,14 @@ namespace EC01.Areas.Admin.Controllers
 
             if (brand is null)
                 return RedirectToAction("NotFoundPage", "Home");
+            // remove old img from wwwroot
+            var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images", brand.Img);
+            if (System.IO.File.Exists(oldPath))
+            {
+                System.IO.File.Delete(oldPath);
+            }
             _context.Brands.Remove(brand);
             _context.SaveChanges();
-
-            TempData["success-notification"] = "Delete Brand Successfully";
-
             return RedirectToAction(nameof(Index));
         }
     }
