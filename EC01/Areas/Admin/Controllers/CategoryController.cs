@@ -10,6 +10,9 @@ namespace EC01.Areas.Admin.Controllers
         public IActionResult Index()
         {
             var categories = _context.Categories.AsNoTracking().AsQueryable();
+
+            // Add Filter
+
             return View(categories.AsEnumerable());
         }
 
@@ -48,15 +51,27 @@ namespace EC01.Areas.Admin.Controllers
         }
 
         //Delete
+        //public IActionResult Delete(int id)
+        //{
+        //    var category = _context.Categories.FirstOrDefault(c => c.Id == id);
+        //    if (category is null)
+        //    {
+        //        return RedirectToAction("NotFoundPage", "Home");
+        //    }
+        //    _context.Categories.Remove(category);
+        //    _context.SaveChanges();
+        //    return RedirectToAction(nameof(Index));
+        //}
         public IActionResult Delete(int id)
         {
-            var category = _context.Categories.FirstOrDefault(c => c.Id == id);
+            var category = _context.Categories.FirstOrDefault(e => e.Id == id);
+
             if (category is null)
-            {
                 return RedirectToAction("NotFoundPage", "Home");
-            }
+
             _context.Categories.Remove(category);
             _context.SaveChanges();
+
             return RedirectToAction(nameof(Index));
         }
     }
